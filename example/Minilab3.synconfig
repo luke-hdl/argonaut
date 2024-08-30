@@ -1,0 +1,5 @@
+17|VOLUME|Fader 4
+1|VIBRATO|Vibrato
+77|PAN|Knob 4
+16|VIBRATO|Knob 8
+114|SHUTDOWN_LINUX_SYSTEM|Shutdown a Linux system (requires shutdown to be set up in visudo.)

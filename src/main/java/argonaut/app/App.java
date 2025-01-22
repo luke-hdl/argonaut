@@ -1,8 +1,10 @@
 package argonaut.app;
 
+import argonaut.config.SynthConfig;
 import argonaut.logging.Log;
 import argonaut.logging.LoggingEventType;
 import argonaut.midi.MidiKeyboardInputManager;
+import argonaut.voices.KnownVoice;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +52,7 @@ public class App {
 
         try {
             theApp.addLog(new Log(System.out, LoggingEventType.MIDI_IN, LoggingEventType.ERROR, LoggingEventType.DEBUG));
-            theApp.inputManager = new MidiKeyboardInputManager(new File(args[0]));
+            theApp.inputManager = new MidiKeyboardInputManager(SynthConfig.parse(new File(args[0])), KnownVoice.DUAL_OSCILLATOR);
             theApp.inputManager.start();
         } catch (Exception e) {
             theApp.logMessage(e.toString(), LoggingEventType.ERROR);

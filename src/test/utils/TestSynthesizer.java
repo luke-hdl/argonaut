@@ -1,8 +1,10 @@
-package argonaut.midi;
+package utils;
 
 // This file takes heavy influence from Phil Burk's example in the JSyn git repo.
 // I would like to thank him for the influence he's had on my ability to have a good time and make funny sounds.
 
+import argonaut.midi.ControllableMidiSynthesizer;
+import argonaut.midi.MidiReceiver;
 import argonaut.voices.KnownVoice;
 import com.jsyn.JSyn;
 import com.jsyn.Synthesizer;
@@ -10,17 +12,14 @@ import com.jsyn.devices.javasound.MidiDeviceTools;
 import com.jsyn.unitgen.LineOut;
 import com.jsyn.util.MultiChannelSynthesizer;
 import com.jsyn.util.VoiceDescription;
-import argonaut.app.App;
 import argonaut.config.SynthConfig;
-import argonaut.logging.LoggingEventType;
 
 import javax.sound.midi.MidiDevice;
-import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 
 import static java.lang.Thread.sleep;
 
-public class MidiKeyboardInputManager {
+public class TestSynthesizer {
 
     private static final int NUM_CHANNELS = 16;
     private static final int VOICES_PER_CHANNEL = 3;
@@ -33,32 +32,24 @@ public class MidiKeyboardInputManager {
     protected MidiDevice keyboard;
     protected Receiver receiver;
 
-    public MidiKeyboardInputManager(SynthConfig aConfig, KnownVoice voice) {
+    public TestSynthesizer(SynthConfig aConfig, KnownVoice voice) {
         this.config = aConfig;
         setupSynth(voice.getVoiceDescription());
     }
 
-    public void restart(KnownVoice withVoice) throws MidiUnavailableException {
+    public void restart(KnownVoice withVoice) {
         setupSynth(withVoice.getVoiceDescription());
         start();
     }
 
-    public void start() throws MidiUnavailableException {
+    public void start() {
         synth.start();
         lineOut.start();
         keyboard = MidiDeviceTools.findKeyboard();
         receiver = new MidiReceiver(midiSynthesizer);
-        if (keyboard != null) {
-            keyboard.open();
-            keyboard.getTransmitter().setReceiver(receiver);
-            App.getApp().logMessage("Play MIDI keyboard: " + keyboard.getDeviceInfo().getDescription(), LoggingEventType.DEBUG);
-        } else {
-            throw new MidiUnavailableException("Could not find a keyboard.");
-        }
-        playStartUpSound();
     }
 
-    private void playStartUpSound() {
+    public void playStartUpSound() {
         try {
             byte[] bytes1 = {(byte) -112, (byte) 59, (byte) 115};
             byte[] bytes2 = {(byte) -112, (byte) 62, (byte) 115};
